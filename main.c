@@ -1,13 +1,21 @@
 #include "raylib.h"
 
 // im gonna try making a few balls float around and bounch with some physics for fun soon...
+// https://github.com/wisonye/raylib-box2d-tutorials/blob/master/tutorials/c-a-how-to-draw-basic-shapes.org
 
 int main(void)
 {
-    InitWindow(800, 500, "Fix Zoom");
-    SetWindowSize(800, 500);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    int screenWidth = 800, screenHeight = 500;
+    InitWindow(screenWidth, screenHeight, "Fix Zoom");
+    SetWindowSize(screenWidth, screenHeight);
     SetTargetFPS(60);
-    Rectangle button = {350, 100, 100, 50}; // x, y, width, height
+
+    int currentGesture = GESTURE_NONE;
+    Vector2 touchPosition = { 0, 0 };
+    
+    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
+
 
     while (!WindowShouldClose())
     {
@@ -15,19 +23,25 @@ int main(void)
         {
             ToggleFullscreen();
         }
+        // =========================================================
+        // MAIN RENDER
+        // =========================================================
+        BeginDrawing();            // anything below this is rendered, before it is ignored
+        ClearBackground(DARKBLUE); // this must be directly below beginDrawing
 
-        DrawRectangleRec(button, LIGHTGRAY);
-        DrawText("button", button.x + 10, button.y + 15, 20, BLACK);
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
-            CheckCollisionPointRec(GetMousePosition(), button))
-        {
-            DrawText("Button Clicked!", 300, 300, 20, RED);
+        DrawCircleV(ballPosition, 50, GREEN); // position height, position width, size, and color
+       
+        if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 2.0f;
+        if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 2.0f;
+        if (IsKeyDown(KEY_UP)) ballPosition.y -= 2.0f;
+        if (IsKeyDown(KEY_DOWN)) ballPosition.y += 2.0f;
+
+        if (currentGesture == GESTURE_DRAG){
+
+            DrawCircleV(touchPosition, 30, MAROON);
         }
 
-        BeginDrawing();
-        ClearBackground(DARKBLUE);
-        DrawText("My first GUI in C!", 300, 200, 20, BLACK);
         EndDrawing();
     }
 

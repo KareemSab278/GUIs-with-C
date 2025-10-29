@@ -1,3 +1,4 @@
-gcc main.c -lraylib -lm -ldl -lpthread -lGL -o main
+linux: gcc main.c -lraylib -lm -ldl -lpthread -lGL -o main
+win: gcc main.c -o main -lraylib -lgdi32 -lwinmm -lopengl32
 
 if screen size is fucked because of fullscreen then hit xrandr --output HDMI-1 --mode 1920x1080 in terminal
